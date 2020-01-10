@@ -1,0 +1,57 @@
+= 2020
+
+== Exemplu frumos de asociere folosind `@JoinFormula`
+
+.https://github.com/mjiderhamn/hibernate-core/blob/master/hibernate-core/src/matrix/java/org/hibernate/test/annotations/manytoonewithformula/Company.java[Company.java]
+----
+@Entity
+public class Company implements Serializable {
+
+  ...
+
+  private Person person;
+
+  @ManyToOne
+  @JoinColumnsOrFormulas(
+  {
+    @JoinColumnOrFormula(column=@JoinColumn(name="id", referencedColumnName="company_id", updatable=false, insertable=false)),
+    @JoinColumnOrFormula(formula=@JoinFormula(value="'T'", referencedColumnName="is_default"))
+  })
+  public Person getDefaultContactPerson() {
+    return person;
+  }
+
+  ...
+
+}
+----
+
+.https://github.com/mjiderhamn/hibernate-core/blob/master/hibernate-core/src/matrix/java/org/hibernate/test/annotations/manytoonewithformula/Person.java[Person.java]
+----
+@Entity
+public class Person implements Serializable {
+
+  ...
+
+  private int companyId;
+
+  @Column(name="company_id")
+  public int getCompanyId() {
+    return companyId;
+  }
+  public void setCompanyId(int companyId) {
+    this.companyId = companyId;
+  }
+  @Column(name="is_default")
+  public String isDefaultFlag() {
+    return defaultFlag;
+  }
+  public void setDefaultFlag(String defaultFlag) {
+    this.defaultFlag = defaultFlag;
+  }
+
+  ...
+
+}
+----
+
